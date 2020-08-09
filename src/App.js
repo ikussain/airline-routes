@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
-import data from './data'
+import DATA from './data'
 import { getAirlineById, getAirportByCode } from './data'
+import Table from './components/Table'
 
 class App extends Component {
+  formatData = (property, value) => {
+    if (property === 'airline') {
+      return getAirlineById(value).name;
+    } else {
+      return getAirportByCode(value).name;
+    }
+  }
+
   render() {
-    const routeTableData = data.routes.map((route, idx) => (
+    const columns = [
+      {name: 'Airline', property: 'airline'},
+      {name: 'Source Airport', property: 'src'},
+      {name: 'Destination Airport', property: 'dest'}
+    ]
+
+    const routeTableData = DATA.routes.map((route, idx) => (
       <tr key={idx}>
         <td>{getAirlineById(route.airline).name}</td>
         <td>{getAirportByCode(route.src).name}</td>
@@ -23,18 +38,12 @@ class App extends Component {
             Welcome to the app!
           </p>
 
-          <table className="routes-table">
-            <thead>
-              <tr>
-                <th>Airline</th>
-                <th>Source</th>
-                <th>Destination</th>
-              </tr>
-            </thead>
-            <tbody>
-              {routeTableData}
-            </tbody>
-          </table>
+          <Table 
+            className="routes-table" 
+            columns={columns} 
+            rows={DATA.routes}
+            format={this.formatData}
+          />
         </section>
       </div>
     );
