@@ -18,15 +18,11 @@ class App extends Component {
       {name: 'Airline', property: 'airline'},
       {name: 'Source Airport', property: 'src'},
       {name: 'Destination Airport', property: 'dest'}
-    ]
+    ];
 
-    const routeTableData = DATA.routes.map((route, idx) => (
-      <tr key={idx}>
-        <td>{getAirlineById(route.airline).name}</td>
-        <td>{getAirportByCode(route.src).name}</td>
-        <td>{getAirportByCode(route.dest).name}</td>
-      </tr>
-    ))
+    const rows = DATA.routes;
+
+    const PAGE_LIMIT = 25;
 
     return (
       <div className="app">
@@ -41,8 +37,9 @@ class App extends Component {
           <Table 
             className="routes-table" 
             columns={columns} 
-            rows={DATA.routes}
+            rows={rows}
             format={this.formatData}
+            perPage={PAGE_LIMIT}
           />
         </section>
       </div>
