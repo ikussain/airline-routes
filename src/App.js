@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import data from './data'
+import { getAirlineById, getAirportByCode } from './data'
 
 class App extends Component {
   render() {
-    const routeTableData = data.routes.map((route) => (
-      <tr>
-        <td>{route.airline}</td>
-        <td>{route.src}</td>
-        <td>{route.dest}</td>
+    const routeTableData = data.routes.map((route, idx) => (
+      <tr key={idx}>
+        <td>{getAirlineById(route.airline).name}</td>
+        <td>{getAirportByCode(route.src).name}</td>
+        <td>{getAirportByCode(route.dest).name}</td>
       </tr>
     ))
 
@@ -22,7 +23,7 @@ class App extends Component {
             Welcome to the app!
           </p>
 
-          <table class="routes-table">
+          <table className="routes-table">
             <thead>
               <tr>
                 <th>Airline</th>
