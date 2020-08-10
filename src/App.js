@@ -26,8 +26,8 @@ class App extends Component {
     this.setState({ airline: value})
   }
 
-  onAirlineSelect = (value) => {
-
+  handleAirportSelect = (value) => {
+    this.setState({ airport: value })
   }
 
   availableAirlines = () => {
@@ -42,9 +42,13 @@ class App extends Component {
     return this.state.airline === 'all' || this.state.airline === route.airline 
   }
 
+  validAirport = (route) => {
+    return this.state.airport === 'all' || this.state.airport === route.src || this.state.airport === route.dest
+  }
+
   filterRoutes = () => {
     return DATA.routes.filter((route) => {
-      return this.validAirline(route);
+      return this.validAirline(route) && this.validAirport(route);
     })
   }
 
@@ -77,6 +81,14 @@ class App extends Component {
               allTitle="All Airlines"
               value={this.state.airline}
               onSelect={this.handleAirlineSelect}
+            />
+            <Select
+              options={this.availableAirports()}
+              valueKey="code"
+              titleKey="name"
+              allTitle="All Airports"
+              value={this.state.airport}
+              onSelect={this.handleAirportSelect}
             />
           </div>
 
