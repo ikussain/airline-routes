@@ -30,6 +30,13 @@ class App extends Component {
     this.setState({ airport: value })
   }
 
+  clearFilters = () => {
+    this.setState({
+      airport: 'all',
+      airline: 'all'
+    });
+  }
+
   availableAirlines = () => {
     return DATA.airlines
   }
@@ -50,6 +57,10 @@ class App extends Component {
     return DATA.routes.filter((route) => {
       return this.validAirline(route) && this.validAirport(route);
     })
+  }
+
+  buttonDisabled = () => {
+    return this.state.airport === 'all' && this.state.airline === 'all';
   }
 
   render() {
@@ -90,6 +101,12 @@ class App extends Component {
               value={this.state.airport}
               onSelect={this.handleAirportSelect}
             />
+            <button
+              onClick={this.clearFilters}
+              disabled={this.buttonDisabled()}
+            >
+              Show All Routes
+            </button>
           </div>
 
           <Table 
