@@ -4,12 +4,13 @@ import DATA from './data'
 import { getAirlineById, getAirportByCode } from './data'
 import Table from './components/Table'
 import Select from './components/Select'
+import Map from './components/Map'
 
 class App extends Component {
   state = {
     airline: 'all',
     airport: 'all',
-  }
+  };
 
   formatData = (property, value) => {
     if (property === 'airline') {
@@ -23,11 +24,11 @@ class App extends Component {
     if (value !== 'all') {
       value = parseInt(value, 10);
     }
-    this.setState({ airline: value})
+    this.setState({ airline: value});
   }
 
   handleAirportSelect = (value) => {
-    this.setState({ airport: value })
+    this.setState({ airport: value });
   }
 
   clearFilters = () => {
@@ -38,11 +39,11 @@ class App extends Component {
   }
 
   routesForAirline = (airlineId) => {
-    return DATA.routes.filter((route) => (route.airline === airlineId))
+    return DATA.routes.filter((route) => (route.airline === airlineId));
   }
 
   routesForAirport = (airportCode) => {
-    return DATA.routes.filter((route) => (route.dest === airportCode || route.src === airportCode))
+    return DATA.routes.filter((route) => (route.dest === airportCode || route.src === airportCode));
   }
 
   availableAirlines = () => {
@@ -50,10 +51,10 @@ class App extends Component {
       return DATA.airlines;
     } else {
       const airportCode = this.state.airport;
-      const airportRoutes = this.routesForAirport(airportCode)
+      const airportRoutes = this.routesForAirport(airportCode);
       return DATA.airlines.map((airline) => {
         const disabled = !airportRoutes.some((route) => (route.airline === airline.id));
-        return Object.assign({}, airline, { disabled })
+        return Object.assign({}, airline, { disabled });
       })
     }
   }
@@ -66,17 +67,17 @@ class App extends Component {
       const airlineRoutes = this.routesForAirline(airlineId);
       return DATA.airports.map((airport) => {
         const disabled = !airlineRoutes.some((route) => (route.src === airport.code || route.dest === airport.code));
-        return Object.assign({}, airport, { disabled })
+        return Object.assign({}, airport, { disabled });
       })
     }
   }
 
   validAirline = (route) => {
-    return this.state.airline === 'all' || this.state.airline === route.airline 
+    return this.state.airline === 'all' || this.state.airline === route.airline;
   }
 
   validAirport = (route) => {
-    return this.state.airport === 'all' || this.state.airport === route.src || this.state.airport === route.dest
+    return this.state.airport === 'all' || this.state.airport === route.src || this.state.airport === route.dest;
   }
 
   filterRoutes = () => {
@@ -96,7 +97,9 @@ class App extends Component {
       {name: 'Destination Airport', property: 'dest'}
     ];
 
-    const rows = this.filterRoutes();
+    const routes = this.filterRoutes();
+    const availableAirports = this.availableAirports();
+    const availableAirlines = this.availableAirlines();
 
     const PAGE_LIMIT = 25;
 
@@ -106,13 +109,14 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
-          <p>
-            Welcome to the app!
-          </p>
+          <Map 
+            routes={routes}
+            airports={DATA.airports}
+          />
 
           <div>
             <Select 
-              options={this.availableAirlines()}
+              options={availableAirlines}
               valueKey="id"
               titleKey="name"
               allTitle="All Airlines"
@@ -120,7 +124,7 @@ class App extends Component {
               onSelect={this.handleAirlineSelect}
             />
             <Select
-              options={this.availableAirports()}
+              options={availableAirports}
               valueKey="code"
               titleKey="name"
               allTitle="All Airports"
@@ -138,7 +142,7 @@ class App extends Component {
           <Table 
             className="routes-table" 
             columns={columns} 
-            rows={rows}
+            rows={routes}
             format={this.formatData}
             perPage={PAGE_LIMIT}
           />
