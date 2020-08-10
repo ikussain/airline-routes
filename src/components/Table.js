@@ -63,7 +63,7 @@ export default class extends Component {
         </table>
 
       <p>
-        {`Showing ${start + 1}-${Math.min(start+ this.props.perPage, this.props.rows.length)} of ${this.props.rows.length} routes.`}
+        {`Showing ${start + 1}-${Math.min(start+ tableBody.length)} of ${this.props.rows.length} routes.`}
       </p>
 
       <div className="pagination">
