@@ -37,12 +37,38 @@ class App extends Component {
     });
   }
 
+  routesForAirline = (airlineId) => {
+    return DATA.routes.filter((route) => (route.airline === airlineId))
+  }
+
+  routesForAirport = (airportCode) => {
+    return DATA.routes.filter((route) => (route.dest === airportCode || route.src === airportCode))
+  }
+
   availableAirlines = () => {
-    return DATA.airlines
+    if (this.state.airport === 'all') {
+      return DATA.airlines;
+    } else {
+      const airportCode = this.state.airport;
+      const airportRoutes = this.routesForAirport(airportCode)
+      return DATA.airlines.map((airline) => {
+        const disabled = !airportRoutes.some((route) => (route.airline === airline.id));
+        return Object.assign({}, airline, { disabled })
+      })
+    }
   }
 
   availableAirports = () => {
-    return DATA.airports
+    if (this.state.airline === 'all') {
+      return DATA.airports;
+    } else {
+      const airlineId = this.state.airline;
+      const airlineRoutes = this.routesForAirline(airlineId);
+      return DATA.airports.map((airport) => {
+        const disabled = !airlineRoutes.some((route) => (route.src === airport.code || route.dest === airport.code));
+        return Object.assign({}, airport, { disabled })
+      })
+    }
   }
 
   validAirline = (route) => {

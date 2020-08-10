@@ -10,8 +10,10 @@ export default class extends Component {
     const options = this.props.options.map((option) => {
       const title = option[this.props.titleKey]
       const value = option[this.props.valueKey]
-      return (<option key={value} value={value}>{title}</option>)
+      const disabled = option.disabled || false;
+      return (<option key={value} value={value} disabled={disabled}>{title}</option>)
     })
+
 
     const defaultOption = (<option value='all' key='all'>{this.props.allTitle}</option>)
     return (
